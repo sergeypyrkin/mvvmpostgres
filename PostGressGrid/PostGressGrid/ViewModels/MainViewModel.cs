@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -7,13 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using PostGressGrid.Annotations;
+using PostGressGrid.Models;
 
 namespace PostGressGrid.ViewModel
 {
-    class MainViewModel : INotifyPropertyChanged
+    class MainViewModel : ViewModelBase
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public ObservableCollection<User> ListUser { get; set; } = new ObservableCollection<User>();
+        private User _selectedUser = null;
+
+        public User SelectedUser
+        {
+            get { return _selectedUser; }
+            set
+            {
+                if (_selectedUser != value)
+                {
+                    _selectedUser = value;
+                    //SelectedMarkerChanged();
+                    RaisePropertyChanged("SelectedUser");
+                }
+            }
+        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
@@ -23,99 +44,38 @@ namespace PostGressGrid.ViewModel
         }
 
 
-        private string input;
-
-        public string Input
+        private RelayCommand _addUser;
+        public RelayCommand AddUser
         {
-            get { return this.input; }
-            set
+            get
             {
-                this.input = value;
-                RaisePropertyChanged();
-            }
-        }
+                return _addUser ??
+                       (_addUser = new RelayCommand(() =>
+                       {
 
-        private string output;
+                           loadUsers();
 
-        public string Output
-        {
-            get { return this.output; }
-            set
-            {
-                this.output = value;
-                RaisePropertyChanged();
+                       }));
             }
         }
 
 
-        private string number;
-
-        public string Number
+        public void loadUsers()
         {
-            get { return this.number; }
-            set
+            ListUser.Clear();
+            for (int i = 0; i < 10; i++)
             {
-                this.number = value;
-                RaisePropertyChanged();
+                User u = new User();
+                u.id = i;
+                u.name = "dfgd " + i;
+                u.age = i * 4;
+                ListUser.Add(u);
+                RaisePropertyChanged("dataGridView");
+
+
             }
         }
 
-        public ICommand ChangeText { get; set; }
-        public ICommand OpenWin1 { get; set; }
 
-
-        public MainViewModel()
-        {
-            Number = "5";
-            ChangeText = new RelayCommand(e =>
-            { this.Output = this.Input; },
-                o =>
-                {
-                    return true;
-                });
-
-            OpenWin1 = new RelayCommand(e =>
-            {
-                //var gv = new GridView(Number);
-                //gv.ShowDialog();
-            },
-                o =>
-                {
-                    return true;
-                });
-        }
-
-
-
-
-
-
-        class RelayCommand : ICommand
-        {
-            private Action<object> execute;
-            private Func<object, bool> canExecute;
-
-            public event EventHandler CanExecuteChanged
-            {
-                add { CommandManager.RequerySuggested += value; }
-                remove { CommandManager.RequerySuggested -= value; }
-            }
-
-            public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-            {
-                this.execute = execute;
-                this.canExecute = canExecute;
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return this.canExecute == null || this.canExecute(parameter);
-            }
-
-            public void Execute(object parameter)
-            {
-                this.execute(parameter);
-            }
-        }
     }
 }

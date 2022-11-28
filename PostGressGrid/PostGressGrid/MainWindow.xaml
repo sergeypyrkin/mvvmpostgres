@@ -10,7 +10,114 @@
     <Window.DataContext>
         <vm:MainViewModel></vm:MainViewModel>
     </Window.DataContext>
-    <Grid>
-        
-    </Grid>
+
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <!--<CollectionViewSource
+                Source="{Binding ListReviewEpisode}"
+                x:Key="cvsReviewEpisode">
+            </CollectionViewSource>-->
+
+            <CollectionViewSource
+                x:Key="cvs"
+                IsLiveFilteringRequested="True"
+                Source="{Binding ListUser}">
+            </CollectionViewSource>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"  Margin="0 0 30 0">
+                <Label Content="id"/>
+                <TextBox x:Name="tId" Width="100"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"  Margin="0 0 30 0">
+                <Label Content="Name"/>
+                <TextBox x:Name="tName" Width="100"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"  Margin="0 0 30 0">
+                <Label Content="Age"/>
+                <TextBox x:Name="tAge" Width="100"/>
+            </StackPanel>
+            <Button x:Name="bAdd" Command="{Binding AddUser}" Content="Add" Width="151" HorizontalAlignment="Right"/>
+        </StackPanel>
+        <ListView
+                        x:Name="dataGridView"
+                        Canvas.Left="37"
+                        Canvas.Top="119"
+                        Width="1700"
+                        Height="443"
+                        HorizontalAlignment="Stretch"
+                        BorderBrush="#FF25A0DA"
+                        BorderThickness="1"
+                        FontFamily="Microsoft Sans Serif"
+                        Foreground="#FF000000"
+                        IsTextSearchEnabled="False"
+                        KeyboardNavigation.DirectionalNavigation="Cycle"
+                        ItemsSource="{Binding Source={StaticResource cvs}}"
+                        SelectedItem="{Binding SelectedUser}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding night_analysis }" Value="true">
+                            <Setter Property="Background" Value="DarkGray" />
+                        </DataTrigger>
+                        <Trigger Property="IsSelected" Value="True">
+
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="Background" Value="LightGray" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100" Header="ID">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox
+                                                Width="270"
+                                                BorderThickness="0"
+                                                Text="{Binding id}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Width="100" Header="NAME">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox
+                                                Width="270"
+                                                BorderThickness="0"
+                                                Text="{Binding name}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+
+                    <GridViewColumn Width="100" Header="AGE">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox
+                                                Width="270"
+                                                BorderThickness="0"
+                                                Text="{Binding age}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+
+
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
 </Window>
