@@ -32,6 +32,7 @@ namespace PostGressGrid.ViewModel
                     _selectedUser = value;
                     //SelectedMarkerChanged();
                     RaisePropertyChanged("SelectedUser");
+
                 }
             }
         }
@@ -74,6 +75,29 @@ namespace PostGressGrid.ViewModel
                        }));
             }
         }
+
+
+
+
+        private RelayCommand<User> _DeleteUserCommand;
+
+        public RelayCommand<User> DeleteUserCommand
+        {
+            get
+            {
+                return _DeleteUserCommand ??
+                       (_DeleteUserCommand = new RelayCommand<User>((User e) =>
+                       {
+                          
+
+                       }));
+            }
+        }
+
+
+
+
+
 
 
         public void loadUsers()
