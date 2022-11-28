@@ -22,6 +22,17 @@ namespace PostGressGrid.ViewModel
         public ObservableCollection<User> ListUser { get; set; } = new ObservableCollection<User>();
         private User _selectedUser = null;
 
+        public bool shouldShowImage = true;
+
+        public Visibility ShowImage
+        {
+            get { return shouldShowImage ? Visibility.Visible : Visibility.Hidden; }
+        }
+
+        public bool ShowImage2 { get; set; } = true;
+
+
+
         public User SelectedUser
         {
             get { return _selectedUser; }
@@ -53,6 +64,10 @@ namespace PostGressGrid.ViewModel
                 return _addUser ??
                        (_addUser = new RelayCommand(() =>
                        {
+                           shouldShowImage = false;
+                           ShowImage2 = false;
+                           RaisePropertyChanged("ShowImage");
+                           RaisePropertyChanged("ShowImage2");
 
                            loadUsers();
 
@@ -114,6 +129,8 @@ namespace PostGressGrid.ViewModel
 
 
             }
+
+
         }
 
 

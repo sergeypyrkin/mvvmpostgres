@@ -18,7 +18,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-
+  
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
@@ -31,7 +31,9 @@
                 x:Key="cvsReviewEpisode">
             </CollectionViewSource>-->
 
-            <CollectionViewSource
+             <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+
+             <CollectionViewSource
                 x:Key="cvs"
                 IsLiveFilteringRequested="True"
                 Source="{Binding ListUser}" />
@@ -60,6 +62,7 @@
                 x:Name="bAdd"
                 Width="151"
                 HorizontalAlignment="Right"
+                Visibility="{Binding ShowImage2, Converter={StaticResource booleanToVisibilityConverter}}"
                 Command="{Binding AddUser}"
                 Content="Add" />
         </StackPanel>
