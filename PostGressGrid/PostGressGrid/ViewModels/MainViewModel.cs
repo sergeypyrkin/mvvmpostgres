@@ -17,7 +17,6 @@ namespace PostGressGrid.ViewModel
 {
     class MainViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<User> ListUser { get; set; } = new ObservableCollection<User>();
         private User _selectedUser = null;
@@ -28,6 +27,8 @@ namespace PostGressGrid.ViewModel
         {
             get { return shouldShowImage ? Visibility.Visible : Visibility.Hidden; }
         }
+
+        public string tbox { get; set; } = "123123123";
 
         public bool ShowImage2 { get; set; } = true;
 
@@ -48,12 +49,6 @@ namespace PostGressGrid.ViewModel
             }
         }
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
 
         private RelayCommand _addUser;
@@ -68,6 +63,7 @@ namespace PostGressGrid.ViewModel
                            ShowImage2 = false;
                            RaisePropertyChanged("ShowImage");
                            RaisePropertyChanged("ShowImage2");
+                           RaisePropertyChanged("tbox");
 
                            loadUsers();
 
@@ -85,7 +81,7 @@ namespace PostGressGrid.ViewModel
                        (_myICommandThatShouldHandleLoaded = new RelayCommand(() =>
                        {
 
-                           loadUsers();
+                           //loadUsers();
 
                        }));
             }
