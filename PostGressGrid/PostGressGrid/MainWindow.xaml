@@ -6,7 +6,17 @@
         xmlns:vm="clr-namespace:PostGressGrid.ViewModel"
         xmlns:local="clr-namespace:PostGressGrid"
         mc:Ignorable="d"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+
         Title="MainWindow" Height="450" Width="800">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding MyICommandThatShouldHandleLoaded}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    
     <Window.DataContext>
         <vm:MainViewModel></vm:MainViewModel>
     </Window.DataContext>

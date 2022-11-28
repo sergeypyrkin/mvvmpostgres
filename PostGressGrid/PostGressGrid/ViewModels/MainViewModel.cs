@@ -60,6 +60,22 @@ namespace PostGressGrid.ViewModel
         }
 
 
+        private RelayCommand _myICommandThatShouldHandleLoaded;
+        public RelayCommand MyICommandThatShouldHandleLoaded
+        {
+            get
+            {
+                return _myICommandThatShouldHandleLoaded ??
+                       (_myICommandThatShouldHandleLoaded = new RelayCommand(() =>
+                       {
+
+                           loadUsers();
+
+                       }));
+            }
+        }
+
+
         public void loadUsers()
         {
             ListUser.Clear();
