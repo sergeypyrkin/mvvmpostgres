@@ -10,8 +10,11 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using npgsqlProject;
 using PostGressGrid.Annotations;
 using PostGressGrid.Models;
+using System.Text.RegularExpressions;
+
 
 namespace PostGressGrid.ViewModel
 {
@@ -20,7 +23,7 @@ namespace PostGressGrid.ViewModel
 
         public ObservableCollection<User> ListUser { get; set; } = new ObservableCollection<User>();
         private User _selectedUser = null;
-
+        public Connector connector;
         public bool shouldShowImage = true;
 
         public Visibility ShowImage
@@ -28,9 +31,43 @@ namespace PostGressGrid.ViewModel
             get { return shouldShowImage ? Visibility.Visible : Visibility.Hidden; }
         }
 
-        public string tbox { get; set; } = "123123123";
+        private int? _id;
+        public int? Id
+        {
+            get { return _id; }
+            set
+            {
+                _id = value;
+                RaisePropertyChanged("Id");
+            }
+        }
 
-        public bool ShowImage2 { get; set; } = true;
+ 
+
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                RaisePropertyChanged("Name");
+            }
+        }
+
+
+
+        private int? _age;
+        public int? Age
+        {
+            get { return _age; }
+            set
+            {
+                _age = value;
+                RaisePropertyChanged("Age");
+            }
+        }
+
 
 
 
@@ -59,16 +96,47 @@ namespace PostGressGrid.ViewModel
                 return _addUser ??
                        (_addUser = new RelayCommand(() =>
                        {
-                           shouldShowImage = false;
-                           ShowImage2 = false;
-                           RaisePropertyChanged("ShowImage");
-                           RaisePropertyChanged("ShowImage2");
-                           RaisePropertyChanged("tbox");
-
-                           loadUsers();
+                           bool val = validate();
+                           if (val)
+                           {
+                               User u = new User();
+                               u.id = (int)Id;
+                               u.age = (int)Age;
+                               u.name = Name;
+                               connector.Insert(u);
+                               loadUsers();
+                               Id = null;
+                               Name = "";
+                               Age = null;
+                               RaisePropertyChanged("Id");
+                               RaisePropertyChanged("Name");
+                               RaisePropertyChanged("Age");
+                           }
 
                        }));
             }
+        }
+
+        public bool validate()
+        {
+            if (Id == null || Id < 0)
+            {
+                MessageBox.Show("¬ведите корректный id");
+                return false;
+            }
+
+            if (Age == null || Age < 0)
+            {
+                MessageBox.Show("¬ведите корректный Age");
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(Name))
+            {
+                MessageBox.Show("¬ведите не пустой Name");
+                return false;
+            }
+            return true;
         }
 
 
@@ -81,7 +149,7 @@ namespace PostGressGrid.ViewModel
                        (_myICommandThatShouldHandleLoaded = new RelayCommand(() =>
                        {
 
-                           //loadUsers();
+                           loadUsers();
 
                        }));
             }
@@ -99,7 +167,9 @@ namespace PostGressGrid.ViewModel
                 return _DeleteUserCommand ??
                        (_DeleteUserCommand = new RelayCommand<User>((User e) =>
                        {
-                          
+                           User u = e;
+                           connector.remove(u);
+                           loadUsers();
 
                        }));
             }
@@ -113,19 +183,14 @@ namespace PostGressGrid.ViewModel
 
         public void loadUsers()
         {
-            ListUser.Clear();
-            for (int i = 0; i < 10; i++)
+            if (connector == null)
             {
-                User u = new User();
-                u.id = i;
-                u.name = "dfgd " + i;
-                u.age = i * 4;
-                ListUser.Add(u);
-                RaisePropertyChanged("dataGridView");
-
-
+                connector = new Connector();
             }
-
+            ListUser.Clear();
+            List<User> users = connector.Select();
+            ListUser = new ObservableCollection<User>(users);
+            RaisePropertyChanged("ListUser");
 
         }
 

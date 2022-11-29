@@ -10,6 +10,7 @@
     Title="MainWindow"
     Width="800"
     Height="450"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
     <i:Interaction.Triggers>
@@ -46,24 +47,23 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <StackPanel Margin="0,0,30,0" Orientation="Horizontal">
                 <Label Content="id" />
-                <TextBox x:Name="tId" Width="100" />
+                <TextBox x:Name="tId" Width="100" Text="{Binding Id}" PreviewTextInput="NumberValidationTextBox" />
             </StackPanel>
 
             <StackPanel Margin="0,0,30,0" Orientation="Horizontal">
                 <Label Content="Name" />
-                <TextBox x:Name="tName" Width="100" Text="{Binding tbox}" />
+                <TextBox x:Name="tName" Width="100" Text="{Binding Name}"  />
             </StackPanel>
 
             <StackPanel Margin="0,0,30,0" Orientation="Horizontal">
                 <Label Content="Age" />
-                <TextBox x:Name="tAge" Width="100" Visibility="{Binding ShowImage}" />
+                <TextBox x:Name="tAge" Width="100" Text="{Binding Age}" PreviewTextInput="NumberValidationTextBox" />
                   
             </StackPanel>
             <Button
                 x:Name="bAdd"
                 Width="151"
-                HorizontalAlignment="Right"
-                Visibility="{Binding ShowImage2, Converter={StaticResource booleanToVisibilityConverter}}"
+                HorizontalAlignment="Right"                
                 Command="{Binding AddUser}"
                 Content="Add" />
         </StackPanel>
